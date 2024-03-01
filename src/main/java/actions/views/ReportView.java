@@ -44,10 +44,10 @@ public class ReportView {
     private String content;
 
     //始業時間
-    private LocalDateTime startedAt;
+    private String startedAt;
 
     //終業時間
-    private LocalDateTime closedAt;
+    private String closedAt;
 
     /**
      * 登録日時
