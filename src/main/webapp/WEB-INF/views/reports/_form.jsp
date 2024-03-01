@@ -17,6 +17,14 @@
 <input type="date" name="${AttributeConst.REP_DATE.getValue()}" id="${AttributeConst.REP_DATE.getValue()}" value="<fmt:formatDate value='${reportDay}' pattern='yyyy-MM-dd' />" />
 <br /><br />
 
+<label for="${AttributeConst.REP_STARTED_AT.getValue()}">始業時間</label><br />
+<input type="time" name="${AttributeConst.REP_STARTED_AT.getValue()}" id="${AttributeConst.REP_STARTED_AT.getValue()}" value="${report.startedAt}" />
+<br /><br />
+
+<label for ="${AttributeConst.REP_CLOSED_AT.getValue()}">終業時間</label><br />
+<input type="time" name="${AttributeConst.REP_CLOSED_AT.getValue()}" id="${AttributeConst.REP_CLOSED_AT.getValue()}" value="${report.closedAt}" />
+<br /><br />
+
 <label>氏名</label><br />
 <c:out value="${sessionScope.login_employee.name}" />
 <br /><br />
