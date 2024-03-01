@@ -43,6 +43,12 @@ public class ReportView {
      */
     private String content;
 
+    //始業時間
+    private LocalDateTime startedAt;
+
+    //終業時間
+    private LocalDateTime closedAt;
+
     /**
      * 登録日時
      */
