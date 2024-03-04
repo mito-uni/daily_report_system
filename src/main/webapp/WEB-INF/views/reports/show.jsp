@@ -28,6 +28,18 @@
                     <td><pre><c:out value="${report.content}" /></pre></td>
                 </tr>
                 <tr>
+                    <th>始業時間</th>
+                    <fmt:parseDate value="${report.startedAt}" pattern="yyyy-MM-dd'T'HH:mm" var="startDay" type="date" />
+                    <td><fmt:formatDate value="${startDay}" pattern="HH:mm" /></td>
+                </tr>
+
+                <tr>
+                    <th>終業時間</th>
+                    <fmt:parseDate value="${report.closedAt}" pattern="yyyy-MM-dd'T'HH:mm" var="closeDay" type="date" />
+                    <td><fmt:formatDate value="${closeDay}" pattern="HH:mm" /></td>
+                </tr>
+
+                <tr>
                     <th>登録日時</th>
                     <fmt:parseDate value="${report.createdAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="createDay" type="date" />
                     <td><fmt:formatDate value="${createDay}" pattern="yyyy-MM-dd HH:mm:ss" /></td>

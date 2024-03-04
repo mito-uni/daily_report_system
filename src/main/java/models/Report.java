@@ -1,6 +1,5 @@
 package models;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -85,11 +84,11 @@ public class Report {
 
     //始業時間
     @Column(name = JpaConst.REP_COL_STARTED_AT)
-    private Time startedAt;
+    private LocalDateTime startedAt;
 
     //終業時間
     @Column(name = JpaConst.REP_COL_CLOSED_AT)
-    private Time closedAt;
+    private LocalDateTime closedAt;
 
     /**
      * 登録日時

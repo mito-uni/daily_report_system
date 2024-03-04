@@ -1,6 +1,5 @@
 package actions.views;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -45,10 +44,10 @@ public class ReportView {
     private String content;
 
     //始業時間
-    private Time startedAt;
+    private LocalDateTime startedAt;
 
     //終業時間
-    private Time closedAt;
+    private LocalDateTime closedAt;
 
     /**
      * 登録日時
