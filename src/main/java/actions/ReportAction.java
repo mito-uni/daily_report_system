@@ -232,7 +232,7 @@ public class ReportAction extends ActionBase {
 
             //セッションから入力した勤怠の時間を取得、入力されていなければ、00:00を設定。
             LocalTime startTime = toLocalTime(getRequestParam(AttributeConst.REP_STARTED_AT));
-            LocalTime closeTime = LocalTime.parse(getRequestParam(AttributeConst.REP_CLOSED_AT));
+            LocalTime closeTime = toLocalTime(getRequestParam(AttributeConst.REP_CLOSED_AT));
 
             //入力された日報内容を設定する
             rv.setReportDate(day);
