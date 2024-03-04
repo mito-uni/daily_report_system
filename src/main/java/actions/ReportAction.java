@@ -108,9 +108,23 @@ public class ReportAction extends ActionBase {
             //セッションからログイン中の従業員情報を取得
             EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
-            //セッションから入力した勤怠の時間を取得
-            LocalTime startTime = LocalTime.parse(getRequestParam(AttributeConst.REP_STARTED_AT));
-            LocalTime closeTime = LocalTime.parse(getRequestParam(AttributeConst.REP_CLOSED_AT));
+            //セッションから入力した勤怠の時間を取得、入力されていなければ、00:00を設定。
+            LocalTime startTime = null;
+            if (getRequestParam(AttributeConst.REP_STARTED_AT) == null
+                    || getRequestParam(AttributeConst.REP_STARTED_AT).equals("")) {
+                startTime = LocalTime.of(0, 0, 0);
+            } else {
+                startTime = LocalTime.parse(getRequestParam(AttributeConst.REP_STARTED_AT));
+            }
+
+            //セッションから入力した勤怠の時間を取得、入力されていなければ、00:00を設定。
+            LocalTime closeTime = null;
+            if (getRequestParam(AttributeConst.REP_CLOSED_AT) == null
+                    || getRequestParam(AttributeConst.REP_CLOSED_AT).equals("")) {
+                closeTime = LocalTime.of(0, 0, 0);
+            } else {
+                closeTime = LocalTime.parse(getRequestParam(AttributeConst.REP_CLOSED_AT));
+            }
 
             //パラメータの値をもとに日報情報のインスタンスを作成する
             ReportView rv = new ReportView(

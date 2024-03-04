@@ -83,11 +83,11 @@ public class Report {
     private String content;
 
     //始業時間
-    @Column(name = JpaConst.REP_COL_STARTED_AT)
+    @Column(name = JpaConst.REP_COL_STARTED_AT, nullable = false)
     private LocalDateTime startedAt;
 
     //終業時間
-    @Column(name = JpaConst.REP_COL_CLOSED_AT)
+    @Column(name = JpaConst.REP_COL_CLOSED_AT, nullable = false)
     private LocalDateTime closedAt;
 
     /**

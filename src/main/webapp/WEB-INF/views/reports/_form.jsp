@@ -17,12 +17,14 @@
 <input type="date" name="${AttributeConst.REP_DATE.getValue()}" id="${AttributeConst.REP_DATE.getValue()}" value="<fmt:formatDate value='${reportDay}' pattern='yyyy-MM-dd' />" />
 <br /><br />
 
+<fmt:parseDate value="${report.startedAt}" pattern="yyyy-MM-dd'T'HH:mm" var="startDay" type="date" />
 <label for="${AttributeConst.REP_STARTED_AT.getValue()}">始業時間</label><br />
-<input type="time" name="${AttributeConst.REP_STARTED_AT.getValue()}" id="${AttributeConst.REP_STARTED_AT.getValue()}" value="${report.startedAt}" />
+<input type="time" name="${AttributeConst.REP_STARTED_AT.getValue()}" id="${AttributeConst.REP_STARTED_AT.getValue()}" value="<fmt:formatDate value='${startDay}' pattern='HH:mm' />" />
 <br /><br />
 
+<fmt:parseDate value="${report.closedAt}" pattern="yyyy-MM-dd'T'HH:mm" var="closeDay" type="date" />
 <label for ="${AttributeConst.REP_CLOSED_AT.getValue()}">終業時間</label><br />
-<input type="time" name="${AttributeConst.REP_CLOSED_AT.getValue()}" id="${AttributeConst.REP_CLOSED_AT.getValue()}" value="${report.closedAt}" />
+<input type="time" name="${AttributeConst.REP_CLOSED_AT.getValue()}" id="${AttributeConst.REP_CLOSED_AT.getValue()}" value="<fmt:formatDate value='${closeDay}' pattern='HH:mm' />" />
 <br /><br />
 
 <label>氏名</label><br />
