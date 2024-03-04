@@ -228,8 +228,16 @@ public class ReportAction extends ActionBase {
             //idを条件に日報データを取得する
             ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
 
+            LocalDate day = toLocalDate(getRequestParam(AttributeConst.REP_DATE));
+
+            //セッションから入力した勤怠の時間を取得、入力されていなければ、00:00を設定。
+            LocalTime startTime = toLocalTime(getRequestParam(AttributeConst.REP_STARTED_AT));
+            LocalTime closeTime = LocalTime.parse(getRequestParam(AttributeConst.REP_CLOSED_AT));
+
             //入力された日報内容を設定する
-            rv.setReportDate(toLocalDate(getRequestParam(AttributeConst.REP_DATE)));
+            rv.setReportDate(day);
+            rv.setStartedAt(LocalDateTime.of(day, startTime));
+            rv.setClosedAt(LocalDateTime.of(day, closeTime));
             rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
             rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
 
