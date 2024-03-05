@@ -50,7 +50,14 @@ public enum AttributeConst {
     REP_TITLE("title"),
     REP_CONTENT("content_msg"),
     REP_STARTED_AT("started_at"),
-    REP_CLOSED_AT("closed_at");
+    REP_CLOSED_AT("closed_at"),
+
+    //いいね管理
+    LIKE("like"),
+    LIKES("likes"),
+    LIK_COUNT("likes_count"),
+    LIK_ID("id");
+
 
     private final String text;
     private final Integer i;

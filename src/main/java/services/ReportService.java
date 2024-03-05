@@ -154,4 +154,18 @@ public class ReportService extends ServiceBase {
 
     }
 
+    /**
+     * 指定した日報のいいね数を取得し、返却する
+     * @param report
+     * @return 日報データのいいね数
+     */
+    public long countLike(ReportView report) {
+
+        long likes_count = (long) em.createNamedQuery(JpaConst.Q_LIK_COUNT_REP, Long.class)
+                .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+                .getSingleResult();
+
+        return likes_count;
+    }
+
 }
