@@ -27,7 +27,7 @@ public class LikeAction extends ActionBase {
 
         //セッションからログイン中の従業員情報を取得
         EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
-        ReportView rv = service.findOne(Integer.valueOf(getRequestParam(AttributeConst.REP_ID)));
+        ReportView rv = service.findOne(Integer.parseInt(getRequestParam(AttributeConst.REP_ID)));
 
         LikeView lv = new LikeView(
                 null,

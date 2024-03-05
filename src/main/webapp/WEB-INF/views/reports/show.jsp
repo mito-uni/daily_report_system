@@ -62,7 +62,7 @@
         <br />
         <div>
             <form method="POST" action="<c:url value='?action=${action}&command=${commCrt}' />">
-                <input type="hidden" name="${AttributeConst.REP_ID}" value="${report.id}" />
+                <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
                 <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
                 <button type="submit">いいね</button>
             </form>
