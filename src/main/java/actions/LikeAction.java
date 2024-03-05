@@ -9,6 +9,7 @@ import actions.views.LikeView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
+import constants.MessageConst;
 import services.LikeService;
 
 public class LikeAction extends ActionBase {
@@ -38,6 +39,8 @@ public class LikeAction extends ActionBase {
                 null);
 
         service.create(lv);
+        //セッションに登録完了のフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_LIKED.getMessage());
         redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
 
     }
