@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="constants.ForwardConst" %>
+<%@ page import="constants.AttributeConst" %>
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
@@ -63,7 +64,6 @@
         <div>
             <form method="POST" action="<c:url value='?action=${action}&command=${commCrt}' />">
                 <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
-                <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
                 <button type="submit">いいね</button>
             </form>
         </div>
