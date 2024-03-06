@@ -64,12 +64,15 @@ public interface JpaConst {
     String ENTITY_EMP = "employee"; //従業員
     String ENTITY_REP = "report"; //日報
     String ENTITY_LIK = "like"; //いいね
+    String ENTITY_FOL ="follow"; //フォロー
 
     //JPQL内パラメータ
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
     String JPQL_PARM_REPORT = "report"; //日報
+    String JPQL_PARM_FOLLOWING = "following"; //フォローした従業員
+    String JPQL_PARM_FOLLOWED = "followed"; //フォローされた従業員
 
     //NamedQueryの nameとquery
     //全ての従業員をidの降順に取得する
@@ -99,5 +102,10 @@ public interface JpaConst {
     //指定した日報のいいね数を取得する
     String Q_LIK_COUNT_REP = ENTITY_LIK + ".countLike";
     String Q_LIK_COUNT_REP_DEF = "SELECT COUNT(l) FROM Like As l WHERE l.report = :" + JPQL_PARM_REPORT;
-
+    //指定した従業員がフォローした従業員を全件取得する
+    String Q_FOL_GET_ALL_MINE = ENTITY_FOL + ".getAllMine";
+    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow As f WHERE f.followed = : " + JPQL_PARM_FOLLOWED + "ORDER BY f.id DESC";
+    //指定した従業員が指定の従業員をフォローしている件数を取得(フォローしているかの確認)
+    String Q_FOL_COUNT_FOL = ENTITY_FOL + ".countFol";
+    String Q_FOL_COUNT_FOL_DEF = "SELECT COUNT(f) FROM Follow As f WHERE f.following = :" + JPQL_PARM_FOLLOWING + "AND f.folloed = :" + JPQL_PARM_FOLLOWED;
 }

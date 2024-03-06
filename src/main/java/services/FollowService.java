@@ -30,7 +30,6 @@ public class FollowService extends ServiceBase {
         createInternal(fv);
     }
 
-
     /*
      * idを条件にデータを1件取得する
      * @param id
