@@ -7,8 +7,9 @@
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
-<c:set var="action" value="${ForwardConst.ACT_LIK.getValue()}" />
+<c:set var="actLik" value="${ForwardConst.ACT_LIK.getValue()}" />
 <c:set var="commCrt" value="${ForwardConst.CMD_CREATE.getValue()}" />
+<c:set var="actFol" value="${ForwardConst.ACT_FOL.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -63,14 +64,22 @@
                 </tr>
             </tbody>
         </table>
-
         <br />
-        <div>
-            <form method="POST" action="<c:url value='?action=${action}&command=${commCrt}' />">
-                <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
-                <button type="submit">いいね</button>
-            </form>
-        </div>
+
+        <c:if test="${sessionScope.login_employee.id != report.employee.id}">
+            <div>
+                <form method="POST" action="<c:url value='?action=${actFol}&command=${commCrt}' />">
+                    <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${report.employee.id}" />
+                    <button type="submit">${report.employee.name}さんをフォローする</button>
+                </form>
+            </div><br />
+            <div>
+                <form method="POST" action="<c:url value='?action=${actLik}&command=${commCrt}' />">
+                    <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                    <button type="submit">いいね</button>
+                </form>
+            </div>
+        </c:if>
 
         <c:if test="${sessionScope.login_employee.id == report.employee.id}">
             <p>
