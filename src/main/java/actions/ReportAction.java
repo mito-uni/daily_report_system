@@ -173,9 +173,9 @@ public class ReportAction extends ActionBase {
         //idを条件に日報データを取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
 
-        long LikesCount = service.countLike(rv);
-        putRequestScope(AttributeConst.LIK_COUNT, LikesCount); //日報のいいね数
-        System.out.println(getRequestParam(AttributeConst.LIK_COUNT));
+        //指定した日報のいいね件数を取得
+        long likesCount = service.countLike(rv);
+        putRequestScope(AttributeConst.LIK_COUNT, likesCount); //日報のいいね数
 
         if (rv == null) {
             //該当の日報データが存在しない場合はエラー画面を表示
