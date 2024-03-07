@@ -350,15 +350,109 @@ otherwiseの記述でそれ以外の場合(仕様上1しかないはず)、い�
 - ビューの作成(/webappファイル)
 
 ### 使用する定数の定義追加(/constantsファイル)
+ソースコード[/constants/ForwardConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/ForwardConst.java)
 
-### DTOモデルの作成(/models/Like.java)
+```
+FW_LIK_INDEX("likes/index"); //追加
+```
+ソースコード[/constants/JpaConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/JpaConst.java)
 
-### Viewモデルの作成(/action.views/LikeView.java)
+```
+    //指定した従業員がいいねしたレコードを全件idの降順で取得する
+    String Q_LIK_GET_ALL_MINE = ENTITY_LIK + ".getAllMine";
+    String Q_LIK_GET_ALL_MINE_DEF = "SELECT l FROM Like As l WHERE l.employee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY l.id DESC";
+    //指定した従業員がいいねしたレコードの件数を取得する
+    String Q_LIK_COUNT_GET_ALL_MINE = ENTITY_LIK + ".countAllMine";
+    String Q_LIK_COUNT_GET_ALL_MINE_DEF = "SELECT COUNT(l) FROM Like AS l WHERE l.employee = :" + JPQL_PARM_EMPLOYEE;
+```
 
-### コンバーターの作成(/action.view/LikeConverter.java)
 
-### テーブル操作用クラスの作成(/services/LikeService.java)
+### DTOモデルに記述追加(/models/Like.java)
+ソースコード[/models/Like.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/models/Like.java)
 
-### アクションの作成(/actions/LikeAction.java)
+```
+@NamedQueries({
+    @NamedQuery(
+            name = JpaConst.Q_LIK_GET_ALL_MINE,
+            query = JpaConst.Q_LIK_GET_ALL_MINE_DEF),
+    @NamedQuery(
+            name = JpaConst.Q_LIK_COUNT_GET_ALL_MINE,
+            query = JpaConst.Q_LIK_COUNT_GET_ALL_MINE_DEF),
+})
+```
+
+### テーブル操作用クラスに記述追加(/services/LikeService.java)
+ソースコード[/services/LikeService.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/services/LikeService.java)
+
+```
+public class LikeService extends ServiceBase {
+    /*
+     * 指定した従業員が作成したいいねデータを、指定されたページ数の一覧画面に表示する分取得しLikeViewのリストで返却する
+     * @return 一覧画面に表示するデータのリスト
+     */
+    public List<LikeView> getMinePerPage(EmployeeView employee, int page) {
+        List<Like> likes = em.createNamedQuery(JpaConst.Q_LIK_GET_ALL_MINE, Like.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page -1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+
+        return LikeConverter.toViewList(likes);
+    }
+
+    /*
+     * 指定した従業員が作成したいいねデータの件数を取得し、返却する
+     */
+
+    public long countAllMine(EmployeeView employee) {
+        long count = (long) em.createNamedQuery(JpaConst.Q_LIK_COUNT_GET_ALL_MINE, Long.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+                .getSingleResult();
+
+        return count;
+    }
+(省略)
+}
+```
+
+### アクションにindexメソッド追加(/actions/LikeAction.java)
+ソースコード[/actions/LikeAction.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/actions/LikeAction.java)
+
+```
+public class LikeAction extends ActionBase {
+(省略)
+    public void index() throws ServletException, IOException {
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //ログイン中の従業員が作成したいいねデータを、指定されたページ数の一覧画面に表示する分取得する
+        int page = getPage();
+        List<LikeView> likes = service.getMinePerPage(ev, page);
+
+        //ログイン中の従業員が作成したいいねデータの件数を取得
+        long likeReportsCount = service.countAllMine(ev);
+
+        putRequestScope(AttributeConst.LIKES, likes); //取得したいいねデータ
+        putRequestScope(AttributeConst.LIK_COUNT_MINE, likeReportsCount); //ログイン中の従業員が作成したいいねの数
+        putRequestScope(AttributeConst.PAGE, page); //ページ数
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+
+      //一覧画面を表示
+        forward(ForwardConst.FW_LIK_INDEX);
+    }
+(省略)
+}
+```
 
 ### ビューの作成(/webappファイル)
+ソースコード[/webapp/WEB-INF/views/likes/index.jsp](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/WEB-INF/views/likes/index.jsp)
+
+従業員がいいねした日報一覧を表示するファイルを作成する。
+
+ソースコード[/webapp/WEB-INF/views/topPage/index.jsp](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/WEB-INF/views/topPage/index.jsp)
+
+トップページにいいね一覧に遷移することのできるリンクを作成。
+
+ソースコード[src/main/webapp/css/style.css](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/css/style.css)
+
+レイアウトの修正を記述。
