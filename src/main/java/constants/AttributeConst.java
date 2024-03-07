@@ -56,6 +56,7 @@ public enum AttributeConst {
     LIKE("like"),
     LIKES("likes"),
     LIK_COUNT("likes_count"),
+    LIK_COUNT_MINE("likes_count_mine"),
     LIK_ID("id");
 
 

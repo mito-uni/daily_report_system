@@ -74,10 +74,17 @@
                 </form>
             </div><br />
             <div>
-                <form method="POST" action="<c:url value='?action=${actLik}&command=${commCrt}' />">
-                    <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
-                    <button type="submit">いいね</button>
-                </form>
+                <c:choose>
+                    <c:when test="${likes_count_mine == 0}">
+                        <form method="POST" action="<c:url value='?action=${actLik}&command=${commCrt}' />">
+                            <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                            <button type="submit">いいね</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <p>いいね済み</p>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </c:if>
 

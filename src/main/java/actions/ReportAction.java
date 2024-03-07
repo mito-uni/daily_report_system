@@ -169,13 +169,19 @@ public class ReportAction extends ActionBase {
      * @throws IOException
      */
     public void show() throws ServletException, IOException {
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
         //idを条件に日報データを取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
 
         //指定した日報のいいね件数を取得
         long likesCount = service.countLike(rv);
-        putRequestScope(AttributeConst.LIK_COUNT, likesCount); //日報のいいね数
+        putRequestScope(AttributeConst.LIK_COUNT, likesCount); //指定の日報のいいね数
+
+        //指定した従業員が指定した日報にいいねした件数を取得
+        long likesCountMine = service.countLikeMine(ev, rv);
+        putRequestScope(AttributeConst.LIK_COUNT_MINE, likesCountMine); //ログイン中の従業員の指定の日報に対するいいね数
 
         if (rv == null) {
             //該当の日報データが存在しない場合はエラー画面を表示
