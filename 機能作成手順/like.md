@@ -340,3 +340,25 @@ otherwiseの記述でそれ以外の場合(仕様上1しかないはず)、い�
 </c:if>
 (省略)
 ```
+
+## 4. 従業員がいいねした日報を一覧で見るようにする
+
+- 使用する定数の定義追加(/constantsファイル)
+- DTOモデルに記述追加(/models/Like.java)
+- テーブル操作用クラスに記述追加(/services/LikeService.java)
+- アクションにindexメソッド追加(/actions/LikeAction.java)
+- ビューの作成(/webappファイル)
+
+### 使用する定数の定義追加(/constantsファイル)
+
+### DTOモデルの作成(/models/Like.java)
+
+### Viewモデルの作成(/action.views/LikeView.java)
+
+### コンバーターの作成(/action.view/LikeConverter.java)
+
+### テーブル操作用クラスの作成(/services/LikeService.java)
+
+### アクションの作成(/actions/LikeAction.java)
+
+### ビューの作成(/webappファイル)

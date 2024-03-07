@@ -162,3 +162,7 @@ pre {
 h3 {
     font-size: larger;
 }
+
+#top_subheading {
+    display: flex;
+}

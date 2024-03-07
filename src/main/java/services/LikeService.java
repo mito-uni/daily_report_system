@@ -1,16 +1,46 @@
 package services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import actions.views.EmployeeConverter;
+import actions.views.EmployeeView;
 import actions.views.LikeConverter;
 import actions.views.LikeView;
 import actions.views.ReportConverter;
 import actions.views.ReportView;
+import constants.JpaConst;
+import models.Like;
 import models.Report;
 
 //いいねテーブルの操作に関わる処理を行うクラス
 
 public class LikeService extends ServiceBase {
+    /*
+     * 指定した従業員が作成したいいねデータを、指定されたページ数の一覧画面に表示する分取得しLikeViewのリストで返却する
+     * @return 一覧画面に表示するデータのリスト
+     */
+    public List<LikeView> getMinePerPage(EmployeeView employee, int page) {
+        List<Like> likes = em.createNamedQuery(JpaConst.Q_LIK_GET_ALL_MINE, Like.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page -1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+
+        return LikeConverter.toViewList(likes);
+    }
+
+    /*
+     * 指定した従業員が作成したいいねデータの件数を取得し、返却する
+     */
+
+    public long countAllMine(EmployeeView employee) {
+        long count = (long) em.createNamedQuery(JpaConst.Q_LIK_COUNT_GET_ALL_MINE, Long.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+                .getSingleResult();
+
+        return count;
+    }
 
     /**
      * idを条件に取得したデータをReportViewのインスタンスで返却する
