@@ -111,9 +111,12 @@ public interface JpaConst {
     //指定した従業員がいいねしたレコードの件数を取得する
     String Q_LIK_COUNT_GET_ALL_MINE = ENTITY_LIK + ".countAllMine";
     String Q_LIK_COUNT_GET_ALL_MINE_DEF = "SELECT COUNT(l) FROM Like AS l WHERE l.employee = :" + JPQL_PARM_EMPLOYEE;
-    //指定した従業員がフォローした従業員を全件取得する
+    //指定した従業員がフォローした従業員を全件idの降順で取得する
     String Q_FOL_GET_ALL_MINE = ENTITY_FOL + ".getAllMine";
-    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow As f WHERE f.followed = : " + JPQL_PARM_FOLLOWED + " ORDER BY f.id DESC";
+    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow As f WHERE f.following = : " + JPQL_PARM_FOLLOWING + " ORDER BY f.id DESC";
+    //指定した従業員がフォローした従業員の件数を全取得する
+    String Q_FOL_COUNT_GET_ALL_MINE = ENTITY_FOL + ".countAllMine";
+    String Q_FOL_COUNT_GET_ALL_MINE_DEF = "SELECT COUNT(f) FROM Follow AS f WHERE f.following = :" + JPQL_PARM_FOLLOWING;
     //指定した従業員が指定の従業員をフォローしている件数を取得(フォローしているかの確認)
     String Q_FOL_COUNT_FOL_MINE = ENTITY_FOL + ".countFolMine";
     String Q_FOL_COUNT_FOL_MINE_DEF = "SELECT COUNT(f) FROM Follow As f WHERE f.following = :" + JPQL_PARM_FOLLOWING + " AND f.followed = :" + JPQL_PARM_FOLLOWED;

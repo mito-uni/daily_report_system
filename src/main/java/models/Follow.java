@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import constants.JpaConst;
@@ -22,6 +24,14 @@ import lombok.Setter;
  */
 
 @Table(name = JpaConst.TABLE_FOL)
+@NamedQueries({
+    @NamedQuery(
+            name = JpaConst.Q_FOL_GET_ALL_MINE,
+            query = JpaConst.Q_FOL_GET_ALL_MINE_DEF),
+    @NamedQuery(
+            name = JpaConst.Q_FOL_COUNT_GET_ALL_MINE,
+            query = JpaConst.Q_FOL_COUNT_GET_ALL_MINE_DEF),
+})
 @Getter
 @Setter
 @NoArgsConstructor

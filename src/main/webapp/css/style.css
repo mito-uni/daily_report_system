@@ -166,3 +166,7 @@ h3 {
 #top_subheading {
     display: flex;
 }
+
+.top_subheading_content {
+    margin-left: 20px;
+}
