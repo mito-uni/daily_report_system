@@ -17,26 +17,33 @@
             </div>
         </c:if>
         <h2>いいねした日報　一覧</h2>
-        <table id="report_list">
-            <tbody>
-                <tr>
-                    <th class="report_name">氏名</th>
-                    <th class="report_date">日付</th>
-                    <th class="report_title">タイトル</th>
-                    <th class="report_action">操作</th>
-                </tr>
-                <c:forEach var="like" items="${likes}" varStatus="status">
-                    <fmt:parseDate value="${like.report.reportDate}" pattern="yyyy-MM-dd" var="reportDay" type="date" />
+        <c:choose>
+            <c:when test="${likes_count_mine == 0 || likes_count_mine == null}">
+                <h3>フォローしている従業員はいません。</h3>
+            </c:when>
+            <c:otherwise>
+                <table id="report_list">
+                    <tbody>
+                        <tr>
+                            <th class="report_name">氏名</th>
+                            <th class="report_date">日付</th>
+                            <th class="report_title">タイトル</th>
+                            <th class="report_action">操作</th>
+                        </tr>
+                        <c:forEach var="like" items="${likes}" varStatus="status">
+                            <fmt:parseDate value="${like.report.reportDate}" pattern="yyyy-MM-dd" var="reportDay" type="date" />
 
-                    <tr class="row${status.count % 2}">
-                        <td class="report_name"><c:out value="${like.report.employee.name}" /></td>
-                        <td class="report_date"><fmt:formatDate value='${reportDay}' pattern='yyyy-MM-dd' /></td>
-                        <td class="report_title">${like.report.title}</td>
-                        <td class="report_action"><a href="<c:url value='?action=${actRep}&command=${commShow}&id=${like.report.id}' />">詳細を見る</a></td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                            <tr class="row${status.count % 2}">
+                                <td class="report_name"><c:out value="${like.report.employee.name}" /></td>
+                                <td class="report_date"><fmt:formatDate value='${reportDay}' pattern='yyyy-MM-dd' /></td>
+                                <td class="report_title">${like.report.title}</td>
+                                <td class="report_action"><a href="<c:url value='?action=${actRep}&command=${commShow}&id=${like.report.id}' />">詳細を見る</a></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:otherwise>
+        </c:choose>
 
         <div id="pagination">
             （全 ${likes_count_mine} 件）<br />

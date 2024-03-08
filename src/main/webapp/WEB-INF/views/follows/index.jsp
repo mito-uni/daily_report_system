@@ -15,7 +15,7 @@
         </c:if>
         <h2>フォローした従業員　一覧</h2>
         <c:choose>
-            <c:when test="${follows_count_mine == 0}">
+            <c:when test="${follows_count_mine == 0 || follows_count_mine == null}}">
                 <h3>フォローしている従業員はいません。</h3>
             </c:when>
             <c:otherwise>
