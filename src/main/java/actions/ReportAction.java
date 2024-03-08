@@ -179,7 +179,7 @@ public class ReportAction extends ActionBase {
         long likesCount = service.countLike(rv);
         putRequestScope(AttributeConst.LIK_COUNT, likesCount); //指定の日報のいいね数
 
-        //指定した従業員が指定した日報にいいねした件数を取得
+        //ログイン中の従業員が指定した日報にいいねした件数を取得
         long likesCountMine = service.countLikeMine(ev, rv);
         putRequestScope(AttributeConst.LIK_COUNT_MINE, likesCountMine); //ログイン中の従業員の指定の日報に対するいいね数
 
@@ -190,6 +190,13 @@ public class ReportAction extends ActionBase {
         } else {
 
             putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
+
+            //idを条件に従業員データを取得
+            EmployeeView employee = service.findEmployee((rv.getEmployee().getId()));
+
+            //ログイン中の従業員が指定した従業員にフォローした件数を取得
+            long followsCountMine = service.countFollowMine(ev, employee);
+            putRequestScope(AttributeConst.FOL_COUNT_MINE, followsCountMine);
 
             //詳細画面を表示
             forward(ForwardConst.FW_REP_SHOW);

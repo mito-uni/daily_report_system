@@ -68,10 +68,16 @@
 
         <c:if test="${sessionScope.login_employee.id != report.employee.id}">
             <div>
-                <form method="POST" action="<c:url value='?action=${actFol}&command=${commCrt}' />">
-                    <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${report.employee.id}" />
-                    <button type="submit">${report.employee.name}さんをフォローする</button>
-                </form>
+                <c:choose>
+                    <c:when test="${follows_count_mine == 0}">
+                        <form method="POST" action="<c:url value='?action=${actFol}&command=${commCrt}' />">
+                            <button type="submit">${report.employee.name}さんをフォローする</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                       <p>フォロー済み</p>
+                    </c:otherwise>
+                </c:choose>
             </div><br />
             <div>
                 <c:choose>

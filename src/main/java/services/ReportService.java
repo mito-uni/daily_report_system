@@ -8,6 +8,7 @@ import actions.views.EmployeeView;
 import actions.views.ReportConverter;
 import actions.views.ReportView;
 import constants.JpaConst;
+import models.Employee;
 import models.Report;
 import models.validators.ReportValidator;
 
@@ -80,6 +81,15 @@ public class ReportService extends ServiceBase {
     }
 
     /**
+     * idを条件に取得したデータをEmployeeViewのインスタンスで返却する
+     * @param id
+     * @return 取得データのインスタンス
+     */
+    public EmployeeView findEmployee(int id) {
+        return EmployeeConverter.toView(findEmployeeInternal(id));
+    }
+
+    /**
      * 画面から入力された日報の登録内容を元にデータを1件作成し、日報テーブルに登録する
      * @param rv 日報の登録内容
      * @return バリデーションで発生したエラーのリスト
@@ -146,6 +156,17 @@ public class ReportService extends ServiceBase {
         return likes_count_mine;
     }
 
+    /*
+     * 指定した従業員が指定した従業員にフォローされている件数を取得し、返却する
+     */
+    public long countFollowMine(EmployeeView following, EmployeeView followed) {
+        long follows_count_mine = (long) em.createNamedQuery(JpaConst.Q_FOL_COUNT_FOL_MINE, Long.class)
+                .setParameter(JpaConst.JPQL_PARM_FOLLOWING, EmployeeConverter.toModel(following))
+                .setParameter(JpaConst.JPQL_PARM_FOLLOWED, EmployeeConverter.toModel(followed))
+                .getSingleResult();
+        return follows_count_mine;
+    }
+
     /**
      * idを条件にデータを1件取得する
      * @param id
@@ -153,6 +174,15 @@ public class ReportService extends ServiceBase {
      */
     private Report findOneInternal(int id) {
         return em.find(Report.class, id);
+    }
+
+    /**
+     * idを条件にデータを1件取得する
+     * @param id
+     * @return 取得データのインスタンス
+     */
+    private Employee findEmployeeInternal(int id) {
+        return em.find(Employee.class, id);
     }
 
     /**

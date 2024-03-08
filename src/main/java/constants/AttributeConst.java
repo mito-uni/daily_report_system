@@ -57,8 +57,14 @@ public enum AttributeConst {
     LIKES("likes"),
     LIK_COUNT("likes_count"),
     LIK_COUNT_MINE("likes_count_mine"),
-    LIK_ID("id");
+    LIK_ID("id"),
 
+    //フォロー管理
+    FOLLOW("follow"),
+    FOLLOWS("follows"),
+    FOL_COUNT("follows_count"),
+    FOL_COUNT_MINE("follows_count_mine"),
+    FOL_ID("id");
 
     private final String text;
     private final Integer i;
