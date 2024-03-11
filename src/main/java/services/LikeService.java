@@ -42,6 +42,19 @@ public class LikeService extends ServiceBase {
         return count;
     }
 
+    /*
+     * 指定した従業員の指定した日報に対するいいねを取得
+     */
+
+    public Like getLikeReport(EmployeeView employee, ReportView report) {
+        Like like = em.createNamedQuery(JpaConst.Q_LIK_GET_REP_LIK, Like.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+                .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+                .getSingleResult();
+
+        return like;
+    }
+
     /**
      * idを条件に取得したデータをReportViewのインスタンスで返却する
      * @param id
@@ -62,6 +75,10 @@ public class LikeService extends ServiceBase {
         createInternal(lv);
     }
 
+    public void destroy(Like l) {
+        destroyInternal(l);
+    }
+
     /**
      * idを条件にデータを1件取得する
      * @param id
@@ -80,6 +97,15 @@ public class LikeService extends ServiceBase {
         em.getTransaction().begin();
         em.persist(LikeConverter.toModel(lv));
         em.getTransaction().commit();
+    }
 
+    /*
+     * いいねデータを削除する
+     */
+    private void destroyInternal(Like l) {
+        em.getTransaction().begin();
+        em.remove(l);
+        em.getTransaction().commit();
+        em.close();
     }
 }

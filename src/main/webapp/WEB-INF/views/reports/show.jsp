@@ -10,6 +10,7 @@
 <c:set var="actLik" value="${ForwardConst.ACT_LIK.getValue()}" />
 <c:set var="commCrt" value="${ForwardConst.CMD_CREATE.getValue()}" />
 <c:set var="actFol" value="${ForwardConst.ACT_FOL.getValue()}" />
+<c:set var="commDer" value="${ForwardConst.CMD_DESTROY.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -89,7 +90,10 @@
                         </form>
                     </c:when>
                     <c:otherwise>
-                        <p>いいね済み</p>
+                        <form method="POST" action="<c:url value='?action=${actLik}&command=${commDer}' />">
+                            <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                            <button type="submit">いいね削除</button>
+                        </form>
                     </c:otherwise>
                 </c:choose>
             </div>

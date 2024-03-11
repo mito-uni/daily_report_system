@@ -12,6 +12,7 @@ import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import models.Like;
 import services.LikeService;
 
 public class LikeAction extends ActionBase {
@@ -64,5 +65,21 @@ public class LikeAction extends ActionBase {
         putSessionScope(AttributeConst.FLUSH, MessageConst.I_LIKED.getMessage());
         redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
 
+    }
+
+    public void destroy() throws ServletException, IOException {
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        //idを条件に日報データを取得する
+        ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+        Like l = service.getLikeReport(ev, rv);
+
+        service.destroy(l);
+
+        //セッションに登録完了のフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_LIKE_DELETED.getMessage());
+
+        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
     }
 }

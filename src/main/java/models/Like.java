@@ -25,6 +25,9 @@ import lombok.Setter;
             name = JpaConst.Q_LIK_GET_ALL_MINE,
             query = JpaConst.Q_LIK_GET_ALL_MINE_DEF),
     @NamedQuery(
+            name = JpaConst.Q_LIK_GET_REP_LIK,
+            query = JpaConst.Q_LIK_GET_REP_LIK_DEF),
+    @NamedQuery(
             name = JpaConst.Q_LIK_COUNT_GET_ALL_MINE,
             query = JpaConst.Q_LIK_COUNT_GET_ALL_MINE_DEF),
 })

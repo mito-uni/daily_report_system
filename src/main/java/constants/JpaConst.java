@@ -102,6 +102,9 @@ public interface JpaConst {
     //指定した日報のいいね数を取得する
     String Q_LIK_COUNT_REP = ENTITY_LIK + ".countLike";
     String Q_LIK_COUNT_REP_DEF = "SELECT COUNT(l) FROM Like As l WHERE l.report = :" + JPQL_PARM_REPORT;
+    //いいねテーブル内の指定の従業員の指定の日報を取得する
+    String Q_LIK_GET_REP_LIK = ENTITY_LIK + ".getRepLike";
+    String Q_LIK_GET_REP_LIK_DEF = "SELECT l FROM Like AS l WHERE l.employee = :" + JPQL_PARM_EMPLOYEE + " AND l.report = :" + JPQL_PARM_REPORT;
     //いいねテーブル内に指定した日報と指定の従業員のデータが保存されているか取得する。（いいねされているか確認する）
     String Q_LIK_COUNT_REP_MINE = ENTITY_LIK + ".countLikeMine";
     String Q_LIK_COUNT_REP_MINE_DEF = "SELECT COUNT(l) FROM Like As l WHERE l.employee = :" + JPQL_PARM_EMPLOYEE + " AND l.report = :" + JPQL_PARM_REPORT;
