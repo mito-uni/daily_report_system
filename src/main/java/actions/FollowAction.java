@@ -64,6 +64,10 @@ public class FollowAction extends ActionBase {
 
         //フォロー情報登録
         service.create(fv);
+
+        //セッションに登録完了のフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_FOLLOWED.getMessage());
+
         redirect(ForwardConst.ACT_FOL, ForwardConst.CMD_INDEX);
     }
 
@@ -113,8 +117,6 @@ public class FollowAction extends ActionBase {
         //セッションに削除完了のフラッシュメッセージを設定
         putSessionScope(AttributeConst.FLUSH, MessageConst.I_FOLLOW_DELETED.getMessage());
 
-        //日報一覧画面に遷移
-        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
-
+        redirect(ForwardConst.ACT_FOL, ForwardConst.CMD_INDEX);
     }
 }
