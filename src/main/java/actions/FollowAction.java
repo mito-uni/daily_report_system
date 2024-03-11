@@ -68,7 +68,11 @@ public class FollowAction extends ActionBase {
         //セッションに登録完了のフラッシュメッセージを設定
         putSessionScope(AttributeConst.FLUSH, MessageConst.I_FOLLOWED.getMessage());
 
-        redirect(ForwardConst.ACT_FOL, ForwardConst.CMD_INDEX);
+        response.sendRedirect(request.getContextPath()
+                + "/?action=" + ForwardConst.ACT_REP.getValue()
+                + "&command=" + ForwardConst.CMD_SHOW.getValue()
+                + "&id=" + toNumber(getRequestParam(AttributeConst.REPORT_ID)));
+        //redirect(ForwardConst.ACT_FOL, ForwardConst.CMD_INDEX);
     }
 
     public void show() throws ServletException, IOException {
@@ -117,6 +121,10 @@ public class FollowAction extends ActionBase {
         //セッションに削除完了のフラッシュメッセージを設定
         putSessionScope(AttributeConst.FLUSH, MessageConst.I_FOLLOW_DELETED.getMessage());
 
-        redirect(ForwardConst.ACT_FOL, ForwardConst.CMD_INDEX);
+        response.sendRedirect(request.getContextPath()
+                + "/?action=" + ForwardConst.ACT_REP.getValue()
+                + "&command=" + ForwardConst.CMD_SHOW.getValue()
+                + "&id=" + toNumber(getRequestParam(AttributeConst.REPORT_ID)));
+        //redirect(ForwardConst.ACT_FOL, ForwardConst.CMD_INDEX);
     }
 }

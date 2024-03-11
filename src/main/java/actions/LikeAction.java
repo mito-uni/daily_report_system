@@ -64,7 +64,11 @@ public class LikeAction extends ActionBase {
         //セッションに登録完了のフラッシュメッセージを設定
         putSessionScope(AttributeConst.FLUSH, MessageConst.I_LIKED.getMessage());
 
-        response.sendRedirect(request.getContextPath() + "/?action=" + ForwardConst.ACT_REP.getValue() + "&command=" + ForwardConst.CMD_SHOW.getValue() + "&id=" + toNumber(getRequestParam(AttributeConst.REP_ID)));
+        //日報詳細画面にリダイレクト
+        response.sendRedirect(request.getContextPath()
+                + "/?action=" + ForwardConst.ACT_REP.getValue()
+                + "&command=" + ForwardConst.CMD_SHOW.getValue()
+                + "&id=" + toNumber(getRequestParam(AttributeConst.REP_ID)));
     }
 
     public void destroy() throws ServletException, IOException {
@@ -80,6 +84,10 @@ public class LikeAction extends ActionBase {
         //セッションに登録完了のフラッシュメッセージを設定
         putSessionScope(AttributeConst.FLUSH, MessageConst.I_LIKE_DELETED.getMessage());
 
-        response.sendRedirect(request.getContextPath() + "/?action=" + ForwardConst.ACT_REP.getValue() + "&command=" + ForwardConst.CMD_SHOW.getValue() + "&id=" + toNumber(getRequestParam(AttributeConst.REP_ID)));
+        //日報詳細画面にリダイレクト
+        response.sendRedirect(request.getContextPath()
+                + "/?action=" + ForwardConst.ACT_REP.getValue()
+                + "&command=" + ForwardConst.CMD_SHOW.getValue()
+                + "&id=" + toNumber(getRequestParam(AttributeConst.REP_ID)));
     }
 }

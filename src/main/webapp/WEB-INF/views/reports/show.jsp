@@ -76,12 +76,14 @@
                 <c:choose>
                     <c:when test="${follows_count_mine == 0}">
                         <form method="POST" action="<c:url value='?action=${actFol}&command=${commCrt}' />">
+                            <input type="hidden" name="${AttributeConst.REPORT_ID.getValue()}" value="${report.id}" />
                             <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${report.employee.id}" />
                             <button type="submit">${report.employee.name}さんをフォローする</button>
                         </form>
                     </c:when>
                     <c:otherwise>
                         <form method="POST" action="<c:url value='?action=${actFol}&command=${commDer}' />">
+                            <input type="hidden" name="${AttributeConst.REPORT_ID.getValue()}" value="${report.id}" />
                             <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${report.employee.id}" />
                             <button type="submit">${report.employee.name}さんをフォローから外す</button>
                         </form>
