@@ -440,3 +440,121 @@ getMineEmployeePerPage()メソッドでフォローした従業員が作成し�
 ソースコード[src/main/webapp/WEB-INF/views/follows/show.jsp](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/WEB-INF/views/follows/show.jsp)
 
 指定した従業員の一覧表示ビュー
+
+## 4. フォロー削除機能追加
+
+- 定数定義ファイルに記述の追加
+- followモデルに記述の追加
+- テーブル操作用クラスに記述の追加
+- followアクションに削除アクションの記述追加
+- ビューに記述追加
+
+### 定数定義ファイルに記述の追加
+ソースコード[src/main/java/constants/JpaConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/JpaConst.java)
+
+フォローした従業員とフォローされた従業員の情報からフォローレコードを取得する記述を追加。
+
+```
+    //フォローテーブル内の指定の従業員同士のレコードを取得する
+    String Q_FOL_GET_FOL = ENTITY_FOL + ".getFollow";
+    String Q_FOL_GET_FOL_DEF = "SELECT f FROM Follow AS f WHERE f.following = :" + JPQL_PARM_FOLLOWING + " AND f.followed = :" + JPQL_PARM_FOLLOWED;
+```
+ソースコード[src/main/java/constants/MessageConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/MessageConst.java)
+
+フォロー削除時のメッセージ文の定義追加。
+
+```
+    I_FOLLOW_DELETED("フォローを削除しました。"),
+```
+
+### followモデルに記述の追加
+ソースコード[src/main/java/models/Follow.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/models/Follow.java)
+
+```
+    @NamedQuery(
+            name = JpaConst.Q_FOL_GET_FOL,
+            query = JpaConst.Q_FOL_GET_FOL_DEF),
+```
+
+### テーブル操作用クラスに記述の追加
+ソースコード[src/main/java/services/FollowService.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/services/FollowService.java)
+
+フォロー従業員とフォロワー従業員から、指定のフォローレコードを取得する記述の追加。
+
+```
+    //指定のフォローレコードを取得する
+    public Follow getFollowEmployee(EmployeeView following, EmployeeView followed) {
+        Follow follow = em.createNamedQuery(JpaConst.Q_FOL_GET_FOL, Follow.class)
+                .setParameter(JpaConst.JPQL_PARM_FOLLOWING, EmployeeConverter.toModel(following))
+                .setParameter(JpaConst.JPQL_PARM_FOLLOWED, EmployeeConverter.toModel(followed))
+                .getSingleResult();
+        return follow;
+    }
+```
+
+フォローレコードの削除の記述を追加。
+
+```
+    //指定のフォローデータの削除
+    public void destroy(Follow f) {
+        destroyInternal(f);
+    }
+(省略)
+    //フォローデータの削除
+    private void destroyInternal(Follow f) {
+        em.getTransaction().begin();
+        em.remove(f);
+        em.getTransaction().commit();
+        em.close();
+    }
+```
+
+### followアクションに削除アクションの記述追加
+ソースコード[src/main/java/actions/FollowAction.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/actions/FollowAction.java)
+
+フォローを削除するdestroyアクションの記述追加。
+
+```
+    public void destroy() throws ServletException, IOException {
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView following = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //employee_idを条件に日報を作成した従業員データを取得する
+        EmployeeView followed = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+
+        //上記の2つの従業員情報から、フォローデータを取得する
+        Follow f = service.getFollowEmployee(following, followed);
+
+        //フォローデータの削除
+        service.destroy(f);
+
+        //セッションに削除完了のフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_FOLLOW_DELETED.getMessage());
+
+        //日報一覧画面に遷移
+        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+
+    }
+```
+
+### ビューに記述追加
+ソースコード[src/main/webapp/WEB-INF/views/reports/show.jsp](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/WEB-INF/views/reports/show.jsp)
+
+フォローを外す記述の追加。
+
+```
+                <c:choose>
+                    <c:when test="${follows_count_mine == 0}">
+                        <form method="POST" action="<c:url value='?action=${actFol}&command=${commCrt}' />">
+                            <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${report.employee.id}" />
+                            <button type="submit">${report.employee.name}さんをフォローする</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <form method="POST" action="<c:url value='?action=${actFol}&command=${commDer}' />">
+                            <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${report.employee.id}" />
+                            <button type="submit">${report.employee.name}さんをフォローから外す</button>
+                        </form>
+                    </c:otherwise>
+                </c:choose>
+```
