@@ -456,3 +456,123 @@ public class LikeAction extends ActionBase {
 ソースコード[src/main/webapp/css/style.css](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/css/style.css)
 
 レイアウトの修正を記述。
+
+
+## 5. いいね削除機能
+
+- 定数定義ファイルに定数を追加定義する。
+- likeモデルに記述の追加
+- テーブル操作用クラスに記述の追加
+- アクションに記述の追加
+- ビューに記述の追加
+
+### 定数定義ファイルに定数を追加定義する。
+ソースコード[src/main/java/constants/JpaConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/JpaConst.java)
+
+指定のいいねレコードを取得するための記述を追加。
+
+```
+    //いいねテーブル内の指定の従業員の指定の日報を取得する
+    String Q_LIK_GET_REP_LIK = ENTITY_LIK + ".getRepLike";
+    String Q_LIK_GET_REP_LIK_DEF = "SELECT l FROM Like AS l WHERE l.employee = :" + JPQL_PARM_EMPLOYEE + " AND l.report = :" + JPQL_PARM_REPORT;
+```
+
+ソースコード[src/main/java/constants/MessageConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/MessageConst.java)
+
+いいね削除後のフラッシュメッセージを追加。
+
+```
+    I_LIKE_DELETED("いいねを削除しました。"),
+```
+
+### likeモデルに記述の追加。
+ソースコード[src/main/java/models/Like.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/models/Like.java)
+
+```
+    @NamedQuery(
+            name = JpaConst.Q_LIK_GET_REP_LIK,
+            query = JpaConst.Q_LIK_GET_REP_LIK_DEF),
+```
+
+### テーブル操作用クラスに記述の追加。
+ソースコード[]()
+
+従業員と日報から指定のいいねレコードを取得する記述を追加。
+
+```
+    /*
+     * 指定した従業員の指定した日報に対するいいねを取得
+     */
+
+    public Like getLikeReport(EmployeeView employee, ReportView report) {
+        Like like = em.createNamedQuery(JpaConst.Q_LIK_GET_REP_LIK, Like.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+                .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+                .getSingleResult();
+
+        return like;
+    }
+
+```
+
+指定のいいねレコードを削除する記述を追加。
+
+```
+    public void destroy(Like l) {
+        destroyInternal(l);
+    }
+
+    (省略)
+    /*
+     * いいねデータを削除する
+     */
+    private void destroyInternal(Like l) {
+        em.getTransaction().begin();
+        em.remove(l);
+        em.getTransaction().commit();
+        em.close();
+    }
+```
+
+### アクションに記述の追加。
+ソースコード[src/main/java/actions/LikeAction.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/actions/LikeAction.java)
+
+```
+    public void destroy() throws ServletException, IOException {
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        //idを条件に日報データを取得する
+        ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+        Like l = service.getLikeReport(ev, rv);
+
+        service.destroy(l);
+
+        //セッションに登録完了のフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_LIKE_DELETED.getMessage());
+
+        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+    }
+```
+
+### ビューに記述の追加。
+ソースコード[src/main/webapp/WEB-INF/views/reports/show.jsp](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/WEB-INF/views/reports/show.jsp)
+
+いいね削除の記述追加。
+
+```
+                <c:choose>
+                    <c:when test="${likes_count_mine == 0}">
+                        <form method="POST" action="<c:url value='?action=${actLik}&command=${commCrt}' />">
+                            <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                            <button type="submit">いいね</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <form method="POST" action="<c:url value='?action=${actLik}&command=${commDer}' />">
+                            <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                            <button type="submit">いいね削除</button>
+                        </form>
+                    </c:otherwise>
+                </c:choose>
+```
