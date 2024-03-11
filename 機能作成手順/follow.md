@@ -2,10 +2,10 @@
 
 ### 作業内容
 
-1.フォロー作成機能追加
-2.フォロー済みの場合、フォロー済みと表示するようにビューを変更
-3.フォローしている従業員を一覧で表示、フォローしている従業員の日報を一覧表示
-4.フォロー削除機能追加
+1. フォロー作成機能追加
+2. フォロー済みの場合、フォロー済みと表示するようにビューを変更
+3. フォローしている従業員を一覧で表示、フォローしている従業員の日報を一覧表示
+4. フォロー削除機能追加
 
 ### 1.フォロー作成機能追加
 - 使用する定数の定義追加(/constantsファイル)
@@ -283,16 +283,160 @@ ReportServiceで定義したメソッドを使用し、フォローレコード�
 - ビューに記述追加(/webappファイル)
 
 ### 使用する定数の定義追加(/constantsファイル)
-ソースコード[]()
+ソースコード[/constants/ForwardConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/ForwardConst.java)
 
+```
+    FW_FOL_INDEX("follows/index"),
+    FW_FOL_SHOW("follows/show");
+```
+
+ソースコード[/constants/JpaConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/JpaConst.java)
+
+```
+    //指定した従業員がフォローした従業員を全件idの降順で取得する
+    String Q_FOL_GET_ALL_MINE = ENTITY_FOL + ".getAllMine";
+    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow As f WHERE f.following = : " + JPQL_PARM_FOLLOWING + " ORDER BY f.id DESC";
+    //指定した従業員がフォローした従業員の件数を全取得する
+    String Q_FOL_COUNT_GET_ALL_MINE = ENTITY_FOL + ".countAllMine";
+    String Q_FOL_COUNT_GET_ALL_MINE_DEF = "SELECT COUNT(f) FROM Follow AS f WHERE f.following = :" + JPQL_PARM_FOLLOWING;
+```
 ### DTOモデルに記述追加(/models/Report.java)
-ソースコード[]()
+ソースコード[src/main/java/models/Follow.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/models/Follow.java)
+
+@NamedQueriesに定義した定数の記述を追加。
 
 ### テーブル操作用クラスに記述追加(/services/ReportService.java)
-ソースコード[]()
+ソースコード[services/FollowService.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/services/FollowService.java)
+
+getMinePerPage()メソッドでフォローした従業員データを取得し、
+
+getMineEmployeePerPage()メソッドでフォローした従業員が作成した日報データを取得している。
+
+```
+    /**
+     * 指定した従業員が作成した日報データを、指定されたページ数の一覧画面に表示する分取得しReportViewのリストで返却する
+     * @param employee 従業員
+     * @param page ページ数
+     * @return 一覧画面に表示するデータのリスト
+     */
+    public List<ReportView> getMineEmployeePerPage(EmployeeView employee, int page) {
+
+        List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_ALL_MINE, Report.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+        return ReportConverter.toViewList(reports);
+    }
+
+    /**
+     * 指定した従業員が作成した日報データの件数を取得し、返却する
+     * @param employee
+     * @return 日報データの件数
+     */
+    public long countAllMineEmployee(EmployeeView employee) {
+
+        long count = (long) em.createNamedQuery(JpaConst.Q_REP_COUNT_ALL_MINE, Long.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+                .getSingleResult();
+
+        return count;
+    }
+
+    /*
+     * 指定した従業員が作成したフォローデータを、指定されたページ数の一覧画面に表示する分取得しFollowViewのリストで返却する
+     * @return 一覧画面に表示するデータのリスト
+     */
+    public List<FollowView> getMinePerPage(EmployeeView employee, int page) {
+        List<Follow> follows = em.createNamedQuery(JpaConst.Q_FOL_GET_ALL_MINE, Follow.class)
+                .setParameter(JpaConst.JPQL_PARM_FOLLOWING, EmployeeConverter.toModel(employee))
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page -1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+
+        return FollowConverter.toViewList(follows);
+    }
+
+    /*
+     * 指定した従業員が作成したフォローデータの件数を取得し、返却する
+     */
+
+    public long countAllMine(EmployeeView employee) {
+        long count = (long) em.createNamedQuery(JpaConst.Q_FOL_COUNT_GET_ALL_MINE, Long.class)
+                .setParameter(JpaConst.JPQL_PARM_FOLLOWING, EmployeeConverter.toModel(employee))
+                .getSingleResult();
+
+        return count;
+    }
+```
+
 
 ### アクションに記述追加(/actions/ReportAction.java)
-ソースコード[]()
+ソースコード[src/main/java/actions/ReportAction.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/actions/ReportAction.java)
+
+フォローした従業員の一覧画面の表示するためのindex()アクション。
+
+```
+    public void index() throws ServletException, IOException {
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //ログイン中の従業員がフォローした従業員データを、指定されたページ数の一覧画面に表示する分取得する
+        int page = getPage();
+        List<FollowView> follows = service.getMinePerPage(ev, page);
+
+        //ログイン中の従業員がフォローした従業員データの件数を取得
+        long FollowsCount = service.countAllMine(ev);
+
+        putRequestScope(AttributeConst.FOLLOWS, follows); //取得したフォロー済み従業員のデータ
+        putRequestScope(AttributeConst.FOL_COUNT_MINE, FollowsCount); //ログイン中の従業員がフォローした従業員の数
+        putRequestScope(AttributeConst.PAGE, page); //ページ数
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+
+      //一覧画面を表示
+        forward(ForwardConst.FW_FOL_INDEX);
+    }
+```
+
+指定の従業員の日報を一覧表示するためのshow()アクション。
+
+```
+    public void show() throws ServletException, IOException {
+        //idを条件に従業員情報を取得
+        EmployeeView employee = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+
+        String name = employee.getName();
+
+        //指定の従業員が作成した日報データを、指定されたページ数の一覧画面に表示する分取得する
+        int page = getPage();
+        List<ReportView> reports = service.getMineEmployeePerPage(employee, page);
+
+        //指定の従業員が作成した日報データの件数を取得
+        long myFollowReportsCount = service.countAllMineEmployee(employee);
+
+        putRequestScope(AttributeConst.REPORTS, reports); //取得した日報データ
+        putRequestScope(AttributeConst.REP_COUNT, myFollowReportsCount); //指定の従業員が作成した日報の数
+        putRequestScope(AttributeConst.PAGE, page); //ページ数
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+        putRequestScope(AttributeConst.EMP_NAME, name);
+
+        //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
+        String flush = getSessionScope(AttributeConst.FLUSH);
+        if (flush != null) {
+            putRequestScope(AttributeConst.FLUSH, flush);
+            removeSessionScope(AttributeConst.FLUSH);
+        }
+
+        //一覧画面を表示
+        forward(ForwardConst.FW_FOL_SHOW);
+    }
+```
 
 ### ビューに記述追加(/webappファイル)
-ソースコード[]()
+ソースコード[src/main/webapp/WEB-INF/views/follows/index.jsp](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/WEB-INF/views/follows/index.jsp)
+
+フォローした従業員一覧表示ビュー。
+
+ソースコード[src/main/webapp/WEB-INF/views/follows/show.jsp](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/WEB-INF/views/follows/show.jsp)
+
+指定した従業員の一覧表示ビュー
