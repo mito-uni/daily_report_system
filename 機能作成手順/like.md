@@ -495,7 +495,7 @@ public class LikeAction extends ActionBase {
 ```
 
 ### テーブル操作用クラスに記述の追加。
-ソースコード[]()
+ソースコード[src/main/java/services/LikeService.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/services/LikeService.java)
 
 従業員と日報から指定のいいねレコードを取得する記述を追加。
 
