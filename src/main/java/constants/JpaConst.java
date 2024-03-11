@@ -120,6 +120,9 @@ public interface JpaConst {
     //指定した従業員がフォローした従業員の件数を全取得する
     String Q_FOL_COUNT_GET_ALL_MINE = ENTITY_FOL + ".countAllMine";
     String Q_FOL_COUNT_GET_ALL_MINE_DEF = "SELECT COUNT(f) FROM Follow AS f WHERE f.following = :" + JPQL_PARM_FOLLOWING;
+    //フォローテーブル内の指定の従業員同士のレコードを取得する
+    String Q_FOL_GET_FOL = ENTITY_FOL + ".getFollow";
+    String Q_FOL_GET_FOL_DEF = "SELECT f FROM Follow AS f WHERE f.following = :" + JPQL_PARM_FOLLOWING + " AND f.followed = :" + JPQL_PARM_FOLLOWED;
     //指定した従業員が指定の従業員をフォローしている件数を取得(フォローしているかの確認)
     String Q_FOL_COUNT_FOL_MINE = ENTITY_FOL + ".countFolMine";
     String Q_FOL_COUNT_FOL_MINE_DEF = "SELECT COUNT(f) FROM Follow As f WHERE f.following = :" + JPQL_PARM_FOLLOWING + " AND f.followed = :" + JPQL_PARM_FOLLOWED;

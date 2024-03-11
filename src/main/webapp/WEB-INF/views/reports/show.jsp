@@ -77,7 +77,10 @@
                         </form>
                     </c:when>
                     <c:otherwise>
-                       <p>フォロー済み</p>
+                        <form method="POST" action="<c:url value='?action=${actFol}&command=${commDer}' />">
+                            <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${report.employee.id}" />
+                            <button type="submit">${report.employee.name}さんをフォローから外す</button>
+                        </form>
                     </c:otherwise>
                 </c:choose>
             </div><br />

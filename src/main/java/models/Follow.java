@@ -29,6 +29,9 @@ import lombok.Setter;
             name = JpaConst.Q_FOL_GET_ALL_MINE,
             query = JpaConst.Q_FOL_GET_ALL_MINE_DEF),
     @NamedQuery(
+            name = JpaConst.Q_FOL_GET_FOL,
+            query = JpaConst.Q_FOL_GET_FOL_DEF),
+    @NamedQuery(
             name = JpaConst.Q_FOL_COUNT_GET_ALL_MINE,
             query = JpaConst.Q_FOL_COUNT_GET_ALL_MINE_DEF),
 })

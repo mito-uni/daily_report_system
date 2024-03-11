@@ -73,6 +73,15 @@ public class FollowService extends ServiceBase {
         return count;
     }
 
+    //指定のフォローレコードを取得する
+    public Follow getFollowEmployee(EmployeeView following, EmployeeView followed) {
+        Follow follow = em.createNamedQuery(JpaConst.Q_FOL_GET_FOL, Follow.class)
+                .setParameter(JpaConst.JPQL_PARM_FOLLOWING, EmployeeConverter.toModel(following))
+                .setParameter(JpaConst.JPQL_PARM_FOLLOWED, EmployeeConverter.toModel(followed))
+                .getSingleResult();
+        return follow;
+    }
+
     /*
      * idを条件に取得したデータをEmployeeViewのインスタンスで返却する
      * @param id
@@ -92,6 +101,11 @@ public class FollowService extends ServiceBase {
         createInternal(fv);
     }
 
+    //指定のフォローデータの削除
+    public void destroy(Follow f) {
+        destroyInternal(f);
+    }
+
     /*
      * idを条件にデータを1件取得する
      * @param id
@@ -108,5 +122,13 @@ public class FollowService extends ServiceBase {
         em.getTransaction().begin();
         em.persist(FollowConverter.toModel(fv));
         em.getTransaction().commit();
+    }
+
+    //フォローデータの削除
+    private void destroyInternal(Follow f) {
+        em.getTransaction().begin();
+        em.remove(f);
+        em.getTransaction().commit();
+        em.close();
     }
 }

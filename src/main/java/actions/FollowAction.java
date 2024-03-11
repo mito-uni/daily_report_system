@@ -11,6 +11,8 @@ import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
+import constants.MessageConst;
+import models.Follow;
 import services.FollowService;
 
 public class FollowAction extends ActionBase {
@@ -93,5 +95,26 @@ public class FollowAction extends ActionBase {
 
         //一覧画面を表示
         forward(ForwardConst.FW_FOL_SHOW);
+    }
+
+    public void destroy() throws ServletException, IOException {
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView following = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //employee_idを条件に日報を作成した従業員データを取得する
+        EmployeeView followed = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+
+        //上記の2つの従業員情報から、フォローデータを取得する
+        Follow f = service.getFollowEmployee(following, followed);
+
+        //フォローデータの削除
+        service.destroy(f);
+
+        //セッションに削除完了のフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_FOLLOW_DELETED.getMessage());
+
+        //日報一覧画面に遷移
+        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+
     }
 }
