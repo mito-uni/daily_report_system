@@ -31,6 +31,8 @@
 <select name="${AttributeConst.EMP_ADMIN_FLG.getValue()}" id="${AttributeConst.EMP_ADMIN_FLG.getValue()}">
     <option value="${AttributeConst.ROLE_GENERAL.getIntegerValue()}"<c:if test="${employee.adminFlag == AttributeConst.ROLE_GENERAL.getIntegerValue()}"> selected</c:if>>一般</option>
     <option value="${AttributeConst.ROLE_ADMIN.getIntegerValue()}"<c:if test="${employee.adminFlag == AttributeConst.ROLE_ADMIN.getIntegerValue()}"> selected</c:if>>管理者</option>
+    <option value="${AttributeConst.ROLE_MANAGER.getIntegerValue()}"<c:if test="${employee.adminFlag == AttributeConst.ROLE_MANAGER.getIntegerValue()}"> selected</c:if>>課長</option>
+    <option value="${AttributeConst.ROLE_DIRECTOR.getIntegerValue()}"<c:if test="${employee.adminFlag == AttributeConst.ROLE_DIRECTOR.getIntegerValue()}"> selected</c:if>>部長</option>
 </select>
 <br /><br />
 <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${employee.id}" />
