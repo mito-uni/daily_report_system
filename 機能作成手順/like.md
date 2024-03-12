@@ -2,11 +2,11 @@
 
 ### 作業内容
 
-1. いいね作成機能
-2. 日報詳細にいいね数の表示追加
-3. 同じ日報に同じ従業員は1回のみいいねできるようにする
-4. 従業員がいいねした日報を一覧で見るようにする
-5. いいね削除機能
+1. [いいね作成機能](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/like.md#1%E3%81%84%E3%81%84%E3%81%AD%E4%BD%9C%E6%88%90%E6%A9%9F%E8%83%BD)
+2. [日報詳細にいいね数の表示追加](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/like.md#2-%E6%97%A5%E5%A0%B1%E8%A9%B3%E7%B4%B0%E3%81%AB%E3%81%84%E3%81%84%E3%81%AD%E6%95%B0%E3%81%AE%E8%A1%A8%E7%A4%BA%E8%BF%BD%E5%8A%A0)
+3. [同じ日報に同じ従業員は1回のみいいねできるようにする](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/like.md#3-%E5%90%8C%E3%81%98%E6%97%A5%E5%A0%B1%E3%81%AB%E5%90%8C%E3%81%98%E5%BE%93%E6%A5%AD%E5%93%A1%E3%81%AF1%E5%9B%9E%E3%81%AE%E3%81%BF%E3%81%84%E3%81%84%E3%81%AD%E3%81%A7%E3%81%8D%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B)
+4. [従業員がいいねした日報を一覧で見るようにする](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/like.md#4-%E5%BE%93%E6%A5%AD%E5%93%A1%E3%81%8C%E3%81%84%E3%81%84%E3%81%AD%E3%81%97%E3%81%9F%E6%97%A5%E5%A0%B1%E3%82%92%E4%B8%80%E8%A6%A7%E3%81%A7%E8%A6%8B%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B)
+5. [いいね削除機能](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/like.md#5-%E3%81%84%E3%81%84%E3%81%AD%E5%89%8A%E9%99%A4%E6%A9%9F%E8%83%BD)
 
 ## 1.いいね作成機能
 

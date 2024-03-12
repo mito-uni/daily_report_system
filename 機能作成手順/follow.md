@@ -2,12 +2,12 @@
 
 ### 作業内容
 
-1. フォロー作成機能追加
-2. フォロー済みの場合、フォロー済みと表示するようにビューを変更
-3. フォローしている従業員を一覧で表示、フォローしている従業員の日報を一覧表示
-4. フォロー削除機能追加
+1. [フォロー作成機能追加](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/follow.md#1%E3%83%95%E3%82%A9%E3%83%AD%E3%83%BC%E4%BD%9C%E6%88%90%E6%A9%9F%E8%83%BD%E8%BF%BD%E5%8A%A0)
+2. [フォロー済みの場合、フォロー済みと表示するようにビューを変更](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/follow.md#2%E3%83%95%E3%82%A9%E3%83%AD%E3%83%BC%E6%B8%88%E3%81%BF%E3%81%AE%E5%A0%B4%E5%90%88%E3%83%95%E3%82%A9%E3%83%AD%E3%83%BC%E6%B8%88%E3%81%BF%E3%81%A8%E8%A1%A8%E7%A4%BA%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%83%93%E3%83%A5%E3%83%BC%E3%82%92%E5%A4%89%E6%9B%B4)
+3. [フォローしている従業員を一覧で表示、フォローしている従業員の日報を一覧表示](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/follow.md#3%E3%83%95%E3%82%A9%E3%83%AD%E3%83%BC%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E5%BE%93%E6%A5%AD%E5%93%A1%E3%82%92%E4%B8%80%E8%A6%A7%E3%81%A7%E8%A1%A8%E7%A4%BA%E3%83%95%E3%82%A9%E3%83%AD%E3%83%BC%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E5%BE%93%E6%A5%AD%E5%93%A1%E3%81%AE%E6%97%A5%E5%A0%B1%E3%82%92%E4%B8%80%E8%A6%A7%E8%A1%A8%E7%A4%BA)
+4. [フォロー削除機能追加](https://github.com/mito-uni/daily_report_system/blob/main/%E6%A9%9F%E8%83%BD%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86/follow.md#4-%E3%83%95%E3%82%A9%E3%83%AD%E3%83%BC%E5%89%8A%E9%99%A4%E6%A9%9F%E8%83%BD%E8%BF%BD%E5%8A%A0)
 
-### 1.フォロー作成機能追加
+## 1.フォロー作成機能追加
 - 使用する定数の定義追加(/constantsファイル)
 - DTOモデルの作成(/models/Follow.java)
 - Viewモデルの作成(/action.views/FollowView.java)
@@ -16,7 +16,7 @@
 - アクションの作成(/actions/FollowAction.java)
 - ビューの作成(/webappファイル)
 
-## 使用する定数の定義追加(/constantsファイル)
+### 使用する定数の定義追加(/constantsファイル)
 
 ### DTOモデルの作成(/models/Follow.java)
 ソースコード[models/Follow.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/models/Follow.java)
