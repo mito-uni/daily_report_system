@@ -43,6 +43,12 @@ public interface JpaConst {
     String REP_COL_CLOSED_AT = "closed_at"; //終業時間
     String REP_COL_CREATED_AT = "created_at"; //登録日時
     String REP_COL_UPDATED_AT = "updated_at"; //更新日時
+    String REP_COL_APPROVAL_FLAG = "approval_flag"; //承認フラグ
+    String REP_COL_COMMENT ="comment"; //コメント
+
+    int APPROVAL_FLAG_FALSE = 2; //承認フラグ(否認)
+    int APPROVAL_FLAG_TRUE = 1; //承認フラグ(承認済み)
+    int APPROVAL_FLAG_WAIT = 0; //承認フラグ(承認待ち)
 
     //いいねテーブル
     String TABLE_LIK = "likes"; //テーブル名

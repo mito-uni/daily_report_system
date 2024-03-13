@@ -54,6 +54,13 @@ public enum AttributeConst {
     REP_CONTENT("content_msg"),
     REP_STARTED_AT("started_at"),
     REP_CLOSED_AT("closed_at"),
+    REP_APPROVAL_FLAG("approval_flag"),
+    REP_COMMENT("comment"),
+
+    //承認フラグ
+    APPROVAL_FLAG_FALSE(2),
+    APPROVAL_FLAG_TRUE(1),
+    APPROVAL_FLAG_WAIT(0),
 
     //いいね管理
     LIKE("like"),

@@ -58,4 +58,10 @@ public class ReportView {
      * 更新日時
      */
     private LocalDateTime updatedAt;
+
+    //承認フラグ
+    private Integer approvalFlag;
+
+    //コメント
+    private String comment;
 }

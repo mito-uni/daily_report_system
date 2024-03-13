@@ -111,4 +111,13 @@ public class Report {
     @Column(name = JpaConst.REP_COL_UPDATED_AT, nullable = false)
     private LocalDateTime updatedAt;
 
+    //承認フラグ
+    @Column(name = JpaConst.REP_COL_APPROVAL_FLAG, nullable = false)
+    private Integer approvalFlag;
+
+    //コメント
+    @Lob
+    @Column(name = JpaConst.REP_COL_COMMENT)
+    private String comment;
+
 }

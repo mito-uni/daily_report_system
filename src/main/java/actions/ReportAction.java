@@ -136,7 +136,9 @@ public class ReportAction extends ActionBase {
                     LocalDateTime.of(day, startTime),
                     LocalDateTime.of(day, closeTime),
                     null,
-                    null);
+                    null,
+                    AttributeConst.APPROVAL_FLAG_WAIT.getIntegerValue(),
+                    getRequestParam(AttributeConst.REP_COMMENT));
 
             //日報情報登録
             List<String> errors = service.create(rv);
@@ -216,18 +218,19 @@ public class ReportAction extends ActionBase {
         //セッションからログイン中の従業員情報を取得
         EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
-        if (rv == null || ev.getId() != rv.getEmployee().getId()) {
-            //該当の日報データが存在しない、または
-            //ログインしている従業員が日報の作成者でない場合はエラー画面を表示
-            forward(ForwardConst.FW_ERR_UNKNOWN);
-
-        } else {
+        if (ev.getId() == rv.getEmployee().getId() || ev.getAdminFlag() > rv.getEmployee().getAdminFlag()) {
+            //ログインしている従業員が日報の作成者、または
+            //ログインしている従業員より権限が高い場合は編集画面を表示
 
             putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
             putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
 
             //編集画面を表示
             forward(ForwardConst.FW_REP_EDIT);
+
+        } else {
+
+            forward(ForwardConst.FW_ERR_UNKNOWN);
         }
 
     }
@@ -257,6 +260,8 @@ public class ReportAction extends ActionBase {
             rv.setClosedAt(LocalDateTime.of(day, closeTime));
             rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
             rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
+            rv.setApprovalFlag(toNumber(getRequestParam(AttributeConst.REP_APPROVAL_FLAG)));
+            rv.setComment(getRequestParam(AttributeConst.REP_COMMENT));
 
             //日報データを更新する
             List<String> errors = service.update(rv);

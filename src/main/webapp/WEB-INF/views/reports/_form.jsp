@@ -38,6 +38,19 @@
 <label for="${AttributeConst.REP_CONTENT.getValue()}">内容</label><br />
 <textarea  name="${AttributeConst.REP_CONTENT.getValue()}" id="${AttributeConst.REP_CONTENT.getValue()}" rows="10" cols="50">${report.content}</textarea>
 <br /><br />
+
+<label for="${AttributeConst.REP_APPROVAL_FLAG.getValue()}">承認状態</label><br />
+<select name="${AttributeConst.REP_APPROVAL_FLAG.getValue()}" id="${AttributeConst.REP_APPROVAL_FLAG.getValue()}">
+    <option value="${AttributeConst.APPROVAL_FLAG_WAIT.getIntegerValue()}"<c:if test="${report.approvalFlag == AttributeConst.APPROVAL_FLAG_WAIT.getIntegerValue()}"> selected</c:if>>承認待ち</option>
+    <option value="${AttributeConst.APPROVAL_FLAG_TRUE.getIntegerValue()}"<c:if test="${report.approvalFlag == AttributeConst.APPROVAL_FLAG_TRUE.getIntegerValue()}"> selected</c:if>>承認済み</option>
+    <option value="${AttributeConst.APPROVAL_FLAG_FALSE.getIntegerValue()}"<c:if test="${report.approvalFlag == AttributeConst.APPROVAL_FLAG_FALSE.getIntegerValue()}"> selected</c:if>>否認</option>
+</select>
+<br /><br />
+
+<label for="${AttributeConst.REP_COMMENT.getValue()}">コメント</label><br />
+<textarea  name="${AttributeConst.REP_COMMENT.getValue()}" id="${AttributeConst.REP_COMMENT.getValue()}" rows="10" cols="50">${report.comment}</textarea>
+<br /><br />
+
 <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
 <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
 <button type="submit">投稿</button>
