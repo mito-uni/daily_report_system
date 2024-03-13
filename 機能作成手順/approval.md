@@ -126,5 +126,203 @@ reports/show.jspに権限表示の追加。
                 </tr>
 ```
 
-2. Reportモデルに承認済み・承認待ち・却下の選択リストとコメント欄を追加。
+## 2. Reportモデルに承認済み・承認待ち・却下の選択リストとコメント欄を追加。
 
+- 定数定義ファイルに記述を追加
+- Reportモデル、ReportViewモデル、ReportConverterに記述の追加
+- ReportActionに記述追加
+- Viewに記述追加
+
+### 定数定義ファイルに記述を追加
+
+[/constants/AttributeConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/AttributeConst.java)
+
+```
+    //日報管理
+    (省略)
+    REP_APPROVAL_FLAG("approval_flag"),
+    REP_COMMENT("comment"),
+
+    //承認フラグ
+    APPROVAL_FLAG_FALSE(2),
+    APPROVAL_FLAG_TRUE(1),
+    APPROVAL_FLAG_WAIT(0),
+```
+
+[/constants/JpaConst.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/constants/JpaConst.java)
+
+```
+    //日報テーブルカラム
+    (省略)
+    String REP_COL_APPROVAL_FLAG = "approval_flag"; //承認フラグ
+    String REP_COL_COMMENT ="comment"; //コメント
+
+    int APPROVAL_FLAG_FALSE = 2; //承認フラグ(否認)
+    int APPROVAL_FLAG_TRUE = 1; //承認フラグ(承認済み)
+    int APPROVAL_FLAG_WAIT = 0; //承認フラグ(承認待ち)
+
+```
+
+### Reportモデル、ReportViewモデル、ReportConverterに記述の追加
+
+[/models/Report.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/models/Report.java)
+
+```
+    //承認フラグ
+    @Column(name = JpaConst.REP_COL_APPROVAL_FLAG, nullable = false)
+    private Integer approvalFlag;
+
+    //コメント
+    @Lob
+    @Column(name = JpaConst.REP_COL_COMMENT)
+    private String comment;
+```
+
+[/actions/views/ReportView.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/actions/views/ReportView.java)
+
+```
+public class ReportView {
+(省略)
+    //承認フラグ
+    private Integer approvalFlag;
+
+    //コメント
+    private String comment;
+}
+```
+
+[/actions/views/ReportConverter.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/actions/views/ReportConverter.java)
+
+```
+public class ReportConverter {
+    /**
+     * ViewモデルのインスタンスからDTOモデルのインスタンスを作成する
+     * @param rv ReportViewのインスタンス
+     * @return Reportのインスタンス
+     */
+    public static Report toModel(ReportView rv) {
+        return new Report(
+                (省略)
+                rv.getApprovalFlag() == null
+                    ? null
+                    : rv.getApprovalFlag() == AttributeConst.APPROVAL_FLAG_FALSE.getIntegerValue()
+                        ? JpaConst.APPROVAL_FLAG_FALSE
+                        : rv.getApprovalFlag() == AttributeConst.APPROVAL_FLAG_TRUE.getIntegerValue()
+                            ? JpaConst.APPROVAL_FLAG_TRUE
+                            : JpaConst.APPROVAL_FLAG_WAIT,
+                rv.getComment());
+    }
+
+    /**
+     * DTOモデルのインスタンスからViewモデルのインスタンスを作成する
+     * @param r Reportのインスタンス
+     * @return ReportViewのインスタンス
+     */
+    public static ReportView toView(Report r) {
+
+        if (r == null) {
+            return null;
+        }
+
+        return new ReportView(
+                (省略)
+                r.getApprovalFlag() == null
+                    ? null
+                    : r.getApprovalFlag() == JpaConst.APPROVAL_FLAG_FALSE
+                        ? AttributeConst.APPROVAL_FLAG_FALSE.getIntegerValue()
+                        : r.getApprovalFlag() == JpaConst.APPROVAL_FLAG_TRUE
+                            ? AttributeConst.APPROVAL_FLAG_TRUE.getIntegerValue()
+                            : AttributeConst.APPROVAL_FLAG_WAIT.getIntegerValue(),
+                r.getComment());
+    }
+    (省略)
+    /**
+     * Viewモデルの全フィールドの内容をDTOモデルのフィールドにコピーする
+     * @param r DTOモデル(コピー先)
+     * @param rv Viewモデル(コピー元)
+     */
+    public static void copyViewToModel(Report r, ReportView rv) {
+        (省略)
+        r.setApprovalFlag(rv.getApprovalFlag());
+        r.setComment(rv.getComment());
+
+    }
+```
+
+### ReportActionに記述追加
+[/actions/ReportAction.java](https://github.com/mito-uni/daily_report_system/blob/main/src/main/java/actions/ReportAction.java)
+
+create()アクションの記述に承認フラグとコメントを追加。
+
+```
+    public void create() throws ServletException, IOException {
+
+        //CSRF対策 tokenのチェック
+        if (checkToken()) {
+            (省略)
+            //パラメータの値をもとに日報情報のインスタンスを作成する
+            ReportView rv = new ReportView(
+                    (省略)
+                    AttributeConst.APPROVAL_FLAG_WAIT.getIntegerValue(),
+                    getRequestParam(AttributeConst.REP_COMMENT));
+            (省略)
+        }
+    }
+```
+
+edit()アクションの表示条件に上位権限の追加。
+
+```
+    public void edit() throws ServletException, IOException {
+
+        if (ev.getId() == rv.getEmployee().getId() || ev.getAdminFlag() > rv.getEmployee().getAdminFlag()) {
+            //ログインしている従業員が日報の作成者、または
+            //ログインしている従業員より権限が高い場合は編集画面を表示
+
+            putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+            putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
+
+            //編集画面を表示
+            forward(ForwardConst.FW_REP_EDIT);
+
+        } else {
+
+            forward(ForwardConst.FW_ERR_UNKNOWN);
+        }
+    }
+```
+
+update()アクションに承認フラグとコメントを追加。
+
+```
+    public void update() throws ServletException, IOException {
+
+        //CSRF対策 tokenのチェック
+        if (checkToken()) {
+            (省略)
+            rv.setApprovalFlag(toNumber(getRequestParam(AttributeConst.REP_APPROVAL_FLAG)));
+            rv.setComment(getRequestParam(AttributeConst.REP_COMMENT));
+            (省略)
+            }
+        }
+    }
+}
+```
+
+### Viewに記述追加
+
+[/webapp/WEB-INF/views/reports/_form.jsp](https://github.com/mito-uni/daily_report_system/blob/main/src/main/webapp/WEB-INF/views/reports/_form.jsp)
+
+```
+<label for="${AttributeConst.REP_APPROVAL_FLAG.getValue()}">承認状態</label><br />
+<select name="${AttributeConst.REP_APPROVAL_FLAG.getValue()}" id="${AttributeConst.REP_APPROVAL_FLAG.getValue()}">
+    <option value="${AttributeConst.APPROVAL_FLAG_WAIT.getIntegerValue()}"<c:if test="${report.approvalFlag == AttributeConst.APPROVAL_FLAG_WAIT.getIntegerValue()}"> selected</c:if>>承認待ち</option>
+    <option value="${AttributeConst.APPROVAL_FLAG_TRUE.getIntegerValue()}"<c:if test="${report.approvalFlag == AttributeConst.APPROVAL_FLAG_TRUE.getIntegerValue()}"> selected</c:if>>承認済み</option>
+    <option value="${AttributeConst.APPROVAL_FLAG_FALSE.getIntegerValue()}"<c:if test="${report.approvalFlag == AttributeConst.APPROVAL_FLAG_FALSE.getIntegerValue()}"> selected</c:if>>否認</option>
+</select>
+<br /><br />
+
+<label for="${AttributeConst.REP_COMMENT.getValue()}">コメント</label><br />
+<textarea  name="${AttributeConst.REP_COMMENT.getValue()}" id="${AttributeConst.REP_COMMENT.getValue()}" rows="10" cols="50">${report.comment}</textarea>
+<br /><br />
+```
