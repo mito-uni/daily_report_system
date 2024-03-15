@@ -81,6 +81,7 @@ public interface JpaConst {
     String JPQL_PARM_REPORT = "report"; //日報
     String JPQL_PARM_FOLLOWING = "following"; //フォローした従業員
     String JPQL_PARM_FOLLOWED = "followed"; //フォローされた従業員
+    String JPQL_PARM_ADMIN_FLAG = "admin_flag"; //管理者フラグ
 
     //NamedQueryの nameとquery
     //全ての従業員をidの降順に取得する
@@ -95,6 +96,12 @@ public interface JpaConst {
     //指定した社員番号を保持する従業員の件数を取得する
     String Q_EMP_COUNT_REGISTERED_BY_CODE = ENTITY_EMP + ".countRegisteredByCode";
     String Q_EMP_COUNT_REGISTERED_BY_CODE_DEF = "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :" + JPQL_PARM_CODE;
+    //指定した従業員が部長の場合、自身の部下の情報を取得する
+    String Q_EMP_GET_ROLE_DIRECTOR = ENTITY_EMP + ".getRoleDirector";
+    String Q_EMP_GET_ROLE_DIRECTOR_DEF = "SELECT e FROM Employee AS e WHERE e.adminFlag < 3 ORDER BY e.id DESC";
+    //指定した従業員が課長の場合、自身の部下の情報を取得する
+    String Q_EMP_GET_ROLE_MANAGER = ENTITY_EMP + ".getRoleManager";
+    String Q_EMP_GET_ROLE_MANAGER_DEF = "SELECT e FROM Employee AS e WHERE e.adminFlag < 2 ORDER BY e.id DESC";
     //全ての日報をidの降順に取得する
     String Q_REP_GET_ALL = ENTITY_REP + ".getAll";
     String Q_REP_GET_ALL_DEF = "SELECT r FROM Report AS r ORDER BY r.id DESC";
@@ -107,6 +114,9 @@ public interface JpaConst {
     //指定した従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
+    //承認フラグが承認待ちの日報を降順に取得する
+    String Q_REP_GET_APPROVAL_WAIT = ENTITY_REP + ".getApprovalWait";
+    String Q_REP_GET_APPROVAL_WAIT_DEF = "SELECT r FROM Report AS r WHERE r.approvalFlag = 0 AND r.employee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY r.id DESC";
     //指定した日報のいいね数を取得する
     String Q_LIK_COUNT_REP = ENTITY_LIK + ".countLike";
     String Q_LIK_COUNT_REP_DEF = "SELECT COUNT(l) FROM Like As l WHERE l.report = :" + JPQL_PARM_REPORT;

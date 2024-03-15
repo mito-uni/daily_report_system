@@ -8,6 +8,7 @@
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="actLik" value="${ForwardConst.ACT_LIK.getValue()}" />
 <c:set var="actFol" value="${ForwardConst.ACT_FOL.getValue()}" />
+<c:set var="actAPRL" value="${ForwardConst.ACT_APRL.getValue()}" />
 
 <c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
@@ -25,6 +26,7 @@
             <h3>【自分の日報　一覧】</h3>
             <h4 class="top_subheading_content"><a href="<c:url value='?action=${actLik}&command=${commIdx}' />">・いいねした日報一覧</a></h4>
             <h4 class="top_subheading_content"><a href="<c:url value='?action=${actFol}&command=${commIdx}' />">・フォローした従業員一覧</a></h4>
+            <h4 class="top_subheading_content"><a href="<c:url value='?action=${actAPRL}&command=${commIdx}' />">・日報承認管理</a></h4>
         </div>
 
         <table id="report_list">

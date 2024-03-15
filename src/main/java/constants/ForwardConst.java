@@ -14,6 +14,7 @@ public enum ForwardConst {
     ACT_LIK("Like"),
     ACT_FOL("Follow"),
     ACT_AUTH("Auth"),
+    ACT_APRL("Approval"),
 
     //command
     CMD("command"),
@@ -43,7 +44,10 @@ public enum ForwardConst {
     FW_REP_EDIT("reports/edit"),
     FW_LIK_INDEX("likes/index"),
     FW_FOL_INDEX("follows/index"),
-    FW_FOL_SHOW("follows/show");
+    FW_FOL_SHOW("follows/show"),
+    FW_APRL_INDEX("approval/index"),
+    FW_APRL_SHOW("approval/show"),
+    FW_APRL_EDIT("approval/edit");
 
     /**
      * 文字列

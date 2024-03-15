@@ -167,6 +167,40 @@ public class ReportService extends ServiceBase {
         return follows_count_mine;
     }
 
+    /*
+     * 部長の部下を指定されたページ数の一覧表示画面に表示する分取得しEmployeeViewで返却する
+     */
+    public List<EmployeeView> getRoleDirectorPerPage(int page) {
+        List<Employee> employees = em.createNamedQuery(JpaConst.Q_EMP_GET_ROLE_DIRECTOR, Employee.class)
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+        return EmployeeConverter.toViewList(employees);
+    }
+
+    /*
+     * 課長の部下を指定されたページ数の一覧表示画面に表示する分取得しEmployeeViewで返却する
+     */
+    public List<EmployeeView> getRoleManagerPerPage(int page) {
+        List<Employee> employees = em.createNamedQuery(JpaConst.Q_EMP_GET_ROLE_MANAGER, Employee.class)
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+        return EmployeeConverter.toViewList(employees);
+    }
+
+    /*
+     * 未承認の日報を指定されたページ数の一覧画面に表示する分取得しReportViewのリストで返却する
+     */
+    public List<ReportView> getApprovalWaitPerPage(int page) {
+
+        List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_APPROVAL_WAIT, Report.class)
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+        return ReportConverter.toViewList(reports);
+    }
+
     /**
      * idを条件にデータを1件取得する
      * @param id
